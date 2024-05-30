@@ -18,7 +18,7 @@ const Home = () => {
         let randomString = '';
         for (let i = 0; i < 9; i++) {
             randomString += alphanumeric.charAt(Math.floor(Math.random() * alphanumeric.length));
-            if((i+1)%3 == 0 && i != 8) {
+            if((i+1)%3 === 0 && i !== 8) {
                 randomString += '-';
             }
         }
@@ -56,7 +56,7 @@ const Home = () => {
                             <br />
                             <div>
                                 <label htmlFor="createRoom">Room ID</label>
-                                <img src={copy} onClick={handleCopyRoomId} />
+                                <img src={copy} alt='copy' onClick={handleCopyRoomId} />
                             </div>
                             <input 
                                 key="createRoom" 

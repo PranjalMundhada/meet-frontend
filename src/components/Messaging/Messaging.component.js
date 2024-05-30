@@ -159,7 +159,7 @@ const Messaging = (props) => {
 
         <div className='chat-input'>
             <label htmlFor="attachment">
-                <img src={attachments} style={{marginLeft:"10px", cursor:"pointer"}} />
+                <img src={attachments} alt="attachments" style={{marginLeft:"10px", cursor:"pointer"}} />
             </label>
             <input
                 id="attachment"
@@ -181,13 +181,14 @@ const Messaging = (props) => {
                 autoFocus={chat} //whenever chat is true
                 ref={chatInputRef} // Reference for input element
             />
-            <img src={send} alt="" onClick={sendMessage}/>
+            <img src={send} alt="send" onClick={sendMessage}/>
         </div>
 
       </div>
       {/* chat image */}
       <img 
         src={chaticon} 
+        alt="chaticon"
         style={{width:"30px", height:"30px", position:"absolute", bottom:"15px", right:"30px", cursor:"pointer"}} 
         onClick={() => {
             // if(!chat) {
@@ -226,7 +227,7 @@ const Messaging = (props) => {
 
       </div>
       {/* people image */}
-      <img src={peopleicon} onClick={() => {setPeople(!people); setChat(false)}} style={{width:"30px", height:"25px", position:"absolute", bottom:"15px", right:"90px", cursor:"pointer"}} />
+      <img src={peopleicon} alt="peopleicon" onClick={() => {setPeople(!people); setChat(false)}} style={{width:"30px", height:"25px", position:"absolute", bottom:"15px", right:"90px", cursor:"pointer"}} />
 
 
     </div>
