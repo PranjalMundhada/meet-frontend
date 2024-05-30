@@ -1,0 +1,71 @@
+
+body {
+    overflow: hidden;
+}
+
+.Summary {
+    box-sizing: border-box;
+    display: flex;
+    margin: 2vh;
+    height: 96vh;
+}
+
+.Summary button {
+    height: 20px;
+}
+
+.summary-left {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
+
+.summary-right {
+    display: flex;
+    width: 50%;
+}
+
+.summary-right-sub {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.MeetRecording video {
+    width: 100%;
+    border-radius: 5px;
+}
+
+.Messages {
+    width: 50%;
+    margin: 0px 10px;
+    overflow-y: auto;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding-left: 10px;
+}
+
+.Messages p {
+    font-size: larger;
+    font-weight: 500;
+    margin-top: 5px;
+}
+
+.MeetSearchBar {
+    height: 50vh;
+    overflow-y: auto;
+}
+
+.MeetTranscribe div {
+    height: 50vh;
+    overflow-y: auto;
+}
+
+.MeetSummary {
+    height: 40%;
+    overflow-y: auto;
+}
+
