@@ -12,7 +12,7 @@ function MeetSearchBar({ chunks }) {
     const handleSearch = async () => {
         try {
             const response = await axios.post(
-                `${process.env.REACT_APP_BACKEND}search`, 
+                `${process.env.REACT_APP_BACKEND}/search`, 
                 {
                     chunks
                 }, 
