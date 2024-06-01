@@ -79,7 +79,7 @@ const Messaging = (props) => {
   }, [])
 
   useEffect(() => {
-    socketRef.current = io.connect("http://localhost:8000/");
+    socketRef.current = io.connect(`${process.env.REACT_APP_BACKEND}`);
     socketRef.current.on('message', handleMessage);
     return () => {
         socketRef.current.off('message', handleMessage);
