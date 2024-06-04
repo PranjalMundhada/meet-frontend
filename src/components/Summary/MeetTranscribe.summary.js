@@ -20,7 +20,7 @@ function MeetTranscribe({ setTranscribed, onChunksChange, onTextChange, roomId }
     formData.append("videoFile", file);
 
     try {
-      const response = await axios.post('http://localhost:5000/api/ml', formData, {
+      const response = await axios.post(`${REACT_APP_TRANSCRIBE}/api/ml`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }

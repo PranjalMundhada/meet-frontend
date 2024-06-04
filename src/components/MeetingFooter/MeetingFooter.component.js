@@ -94,7 +94,7 @@ const MeetingFooter = (props) => {
             setRecord(false);
 
             // const videoRecordingRef = updatedFirepadRef.child("videoRecording");
-            const videoFileName = `recorded-media-${Date.now()}.mp4`;
+            const videoFileName = `recorded-media-(${roomId})-${Date.now()}.mp4`;
             const videoRef = storageRef.child('videoRecording/' + videoFileName);
 
             //save video in storage

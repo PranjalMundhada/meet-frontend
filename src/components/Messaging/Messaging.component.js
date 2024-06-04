@@ -79,7 +79,6 @@ const Messaging = (props) => {
   }, [])
 
   useEffect(() => {
-    console.log(process.env.REACT_APP_BACKEND);
     socketRef.current = io.connect(`${process.env.REACT_APP_BACKEND}`);
     socketRef.current.on('message', handleMessage);
     return () => {
