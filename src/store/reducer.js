@@ -5,6 +5,7 @@ import {
   REMOVE_PARTICIPANT,
   UPDATE_USER,
   UPDATE_PARTICIPANT,
+  REMOVE_ALL_PARTICIPANTS,
 } from "./actiontypes";
 
 import {
@@ -116,7 +117,14 @@ export const userReducer = (state = defaultUserState, action) => {
     state = { ...state, participants };
     return state;
     
-  }
+  } else if (action.type === REMOVE_ALL_PARTICIPANTS) {
+
+    return {
+      ...defaultUserState,
+      roomId: state.roomId, // Optionally keep the roomId
+    };
+    
+  } 
   return state;
 };
 

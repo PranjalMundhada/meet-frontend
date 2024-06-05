@@ -120,9 +120,11 @@ const Messaging = (props) => {
   return (
     <div className="messaging">
 
-      <div style={{position:"fixed", bottom:"15px", right:"1000px"}}>
-        <button onClick={handleSummaryPage} className="messaging-button">Summary Page</button>
-      </div>
+      {/* {isAdmin && (
+        <div style={{position:"fixed", bottom:"15px", right:"1000px"}}>
+          <button onClick={handleSummaryPage} className="messaging-button">Summary Page</button>
+        </div>
+      )} */}
 
       <div className={`${chat ? 'chat' : 'chat-hide'}`}>
 

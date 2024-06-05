@@ -5,6 +5,7 @@ import {
   REMOVE_PARTICIPANT,
   UPDATE_USER,
   UPDATE_PARTICIPANT,
+  REMOVE_ALL_PARTICIPANTS,
 } from "./actiontypes";
 
 export const setMainStream = (stream) => {
@@ -60,3 +61,7 @@ export const removeParticipant = (userId) => {
     },
   };
 };
+
+export const removeAllParticipants = () => ({
+  type: REMOVE_ALL_PARTICIPANTS,
+});

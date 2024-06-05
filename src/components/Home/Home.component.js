@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import copy from '../../assets/copy.png'
 import './Home.css'
+import copy from '../../assets/copy.png'
+import { firestore } from '../../server/firebase';
 
 const Home = () => {
 
@@ -31,15 +32,37 @@ const Home = () => {
         navigator.clipboard.writeText(id);
     }, [id]);
 
-    const handleCreateRoom = useCallback((e) => {
+    const handleCreateRoom = useCallback(async (e) => {
         e.preventDefault();
+        const emailIdCollectionRef = firestore.collection('emailId').doc(id);
+        await emailIdCollectionRef.set({}, { merge: true });
+        await emailIdCollectionRef.update({
+            [Date.now()]: {
+                name: createName,
+                email: createEmail
+            }
+        });
+        const endCallCollectionRef = firestore.collection('endCall').doc(id);
+        await endCallCollectionRef.set({}, { merge: true });
+        await endCallCollectionRef.update({
+            [Date.now()]: {
+                endCall: false
+            }
+        });
         navigate(`/room/${id}?name=${createName}&isAdmin=true`);
-    }, [createName, id]);
+    }, [createName, createEmail, id]);
 
-    const handleJoinRoom = useCallback((e) => {
+    const handleJoinRoom = useCallback(async (e) => {
         e.preventDefault();
+        const emailIdCollectionRef = firestore.collection('emailId').doc(roomId);
+        await emailIdCollectionRef.update({
+            [Date.now()]: {
+              name: joinName,
+              email: joinEmail
+            }
+        });
         navigate(`/room/${roomId}?name=${joinName}`)
-    }, [joinName, roomId]);
+    }, [joinName, joinEmail, roomId]);
 
     return (
         <center>

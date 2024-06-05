@@ -1,12 +1,16 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
 import "./Participants.css";
 import { connect } from "react-redux";
+import { firestore } from "../../server/firebase";
 import { Participant } from "./Participant/Participant.component";
 
 const Participants = (props) => {
 
+  const {roomId} = useParams();
   const videoRef = useRef(null);
   let participantKey = Object.keys(props.participants);
+  const [endCall, setEndCall] = useState();
 
   useEffect(() => {
     if (videoRef.current) {
@@ -72,6 +76,25 @@ const Participants = (props) => {
       />
     );
   });
+
+  useEffect(() => {
+    const unsubscribe = firestore.collection("endCall").doc(roomId)
+      .onSnapshot((endCallSnapshot) => {
+        if (endCallSnapshot.exists) {
+          const endCallData = endCallSnapshot.data();
+          const latestKey = Object.keys(endCallData).sort().pop();
+          const latestData = endCallData[latestKey];
+          console.log(latestData.endCall);
+          setEndCall(latestData.endCall);
+        } else {
+          console.error("No end call data found for roomId:", roomId);
+        }
+      }, (error) => {
+        console.error("Error fetching end call data:", error);
+      });
+
+    return () => unsubscribe(); // Cleanup subscription on unmount
+  }, [roomId]);
   
   return (
     <div
@@ -83,14 +106,18 @@ const Participants = (props) => {
       className={`participants`}
     >
       {participants}
-      <Participant //user video
-        currentParticipant={currentUser}
-        curentIndex={participantKey.length}
-        hideVideo={screenPresenter && !currentUser.screen}
-        videoRef={videoRef}
-        showAvatar={currentUser && !currentUser.video && !currentUser.screen}
-        currentUser={true}
-      />
+      {currentUser && !endCall ? (
+        <Participant // user video
+          currentParticipant={currentUser}
+          curentIndex={participantKey.length}
+          hideVideo={screenPresenter && !currentUser.screen}
+          videoRef={videoRef}
+          showAvatar={currentUser && !currentUser.video && !currentUser.screen}
+          currentUser={true}
+        />
+      ) : (
+        <div className="meeting-ended-message">Meeting has ended</div>
+      )}
     </div>
   );
 };

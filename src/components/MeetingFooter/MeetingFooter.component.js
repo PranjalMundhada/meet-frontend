@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
+import "./MeetingFooter.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faMicrophone,
@@ -9,18 +10,32 @@ import {
   faMicrophoneSlash,
   faCircle,
   faSquare,
+  faPhone
 } from "@fortawesome/free-solid-svg-icons";
 import ReactTooltip from "react-tooltip";
 import { ReactMediaRecorder } from 'react-media-recorder';
 import { storage, db, firestore } from "../../server/firebase.js";
-import "./MeetingFooter.css";
+import { connect } from "react-redux";
+import {
+  setMainStream,
+  addParticipant,
+  setUser,
+  removeParticipant,
+  updateParticipant,
+  removeAllParticipants,
+} from "../../store/actioncreator";
 
 // const firepadRef = db.database().ref();
 const storageRef = storage.ref();
 
 const MeetingFooter = (props) => {
 
+  const navigate = useNavigate();
   const {roomId} = useParams();
+  const location = useLocation();
+  const isAdminParam = new URLSearchParams(location.search).get('isAdmin');
+  const isAdmin = isAdminParam === 'true';
+
   // const updatedFirepadRef = firepadRef.child(roomId);
   const videoRecordingCollectionRef = firestore.collection(`videoRecording`).doc(roomId);
   videoRecordingCollectionRef.get().then(docSnapshot => {
@@ -47,7 +62,40 @@ const MeetingFooter = (props) => {
     });
   }
 
-  const micClick = () => { //toggles mic
+  const onEndCallClick = async () => { 
+    const participantRef = db.database().ref(`/${roomId}`);
+  
+    participantRef.remove()
+    .then(() => {
+      console.log('All users removed from participantRef');
+    })
+    .catch(error => {
+      console.error('Error removing all users from participantRef:', error);
+    });
+
+    const stream = props.mainStream;
+    if (stream) {
+      stream.getTracks().forEach(track => {
+        track.stop();
+      });
+      props.setMainStream(null);
+    }
+
+    props.removeAllParticipants();
+    // props.setUser(null);
+
+    const endCallCollectionRef = firestore.collection('endCall').doc(roomId);
+    await endCallCollectionRef.set({}, { merge: true });
+    await endCallCollectionRef.update({
+        [Date.now()]: {
+            endCall: true
+        }
+    });
+    
+    navigate(`/summary/${roomId}`);
+  };
+
+  const onMicClick = () => { //toggles mic
     setStreamState((currentState) => {
       return {
         ...currentState,
@@ -124,6 +172,7 @@ const MeetingFooter = (props) => {
   return (
     <div className="meeting-footer">
 
+      {/* Recording */}
       <ReactMediaRecorder
         screen
         render={({ startRecording, stopRecording, mediaBlobUrl }) => (
@@ -149,10 +198,11 @@ const MeetingFooter = (props) => {
         )}
       />
       
+      {/* Audio */}
       <div
         className={"meeting-icons " + (!streamState.mic ? "active" : "")}
         data-tip={streamState.mic ? "Mute Audio" : "Unmute Audio"}
-        onClick={micClick}
+        onClick={onMicClick}
       >
         <FontAwesomeIcon
           icon={!streamState.mic ? faMicrophoneSlash : faMicrophone}
@@ -160,6 +210,7 @@ const MeetingFooter = (props) => {
         />
       </div>
 
+      {/* Video */}
       <div
         className={"meeting-icons " + (!streamState.video ? "active" : "")}
         data-tip={streamState.video ? "Hide Video" : "Show Video"}
@@ -168,6 +219,7 @@ const MeetingFooter = (props) => {
         <FontAwesomeIcon icon={!streamState.video ? faVideoSlash : faVideo} />
       </div>
 
+      {/* Share Screen */}
       <div
         className="meeting-icons"
         data-tip="Share Screen"
@@ -177,10 +229,38 @@ const MeetingFooter = (props) => {
         <FontAwesomeIcon icon={faDesktop} />
       </div>
 
+      {/* End Call */}
+      {isAdmin && (
+        <div
+          className="meeting-icons active"
+          data-tip="End Call"
+          onClick={onEndCallClick}
+        >
+          <FontAwesomeIcon icon={faPhone} />
+        </div>
+      )}
+
       <ReactTooltip />
     </div>
   );
 };
 
-export default MeetingFooter;
+const mapStateToProps = (state) => ({
+  mainStream: state.mainStream,
+  currentUser: state.currentUser,
+  participants: state.participants,
+});
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setMainStream: (stream) => dispatch(setMainStream(stream)),
+    addParticipant: (user) => dispatch(addParticipant(user)),
+    setUser: (user) => dispatch(setUser(user)),
+    removeParticipant: (userId) => dispatch(removeParticipant(userId)),
+    updateParticipant: (user) => dispatch(updateParticipant(user)),
+    removeAllParticipants: (user) => dispatch(removeAllParticipants(user)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MeetingFooter);
 
