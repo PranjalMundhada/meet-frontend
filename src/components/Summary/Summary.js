@@ -40,8 +40,8 @@ function Summary() {
     <div className="Summary">
 
       {!processed && (
-        <button onClick={handleProcess} disabled={processing}>
-          {processing ? 'Processing...' : 'Process'}
+        <button onClick={handleProcess} disabled={processing} className="Summary-button">
+          {processing ? 'Processing...' : 'Start Process'}
         </button>
       )}
 

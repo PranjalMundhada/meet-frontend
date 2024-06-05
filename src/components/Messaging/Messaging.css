@@ -53,3 +53,11 @@
     height: 380px;
     overflow-y: auto;
 }
+
+.messaging-button {
+    padding: 10px 30px;
+    background-color: rgb(146, 145, 145);
+    border: 1px solid black;
+    border-radius: 5px;
+    cursor: pointer;
+}

@@ -6,46 +6,50 @@ import { text } from "@fortawesome/fontawesome-svg-core";
 
 function MeetSearchBar({ chunks }) {
 
-    const [searchText, setSearchText] = useState("");
-    const [searchResults, setSearchResults] = useState([]);
+  const [searchText, setSearchText] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
 
-    const handleSearch = async () => {
-        try {
-            const response = await axios.post(
-                `${process.env.REACT_APP_BACKEND}/search`, 
-                {
-                    chunks
-                }, 
-                {
-                    params: {
-                        text: searchText
-                    },
-                    headers: {
-                        "Content-Type": "application/json"
-                    }
-                }
-            );
-            setSearchResults(response.data);
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-    };
+  const handleSearch = async () => {
+      try {
+          const response = await axios.post(
+              `${process.env.REACT_APP_BACKEND}/search`, 
+              {
+                  chunks
+              }, 
+              {
+                  params: {
+                      text: searchText
+                  },
+                  headers: {
+                      "Content-Type": "application/json"
+                  }
+              }
+          );
+          setSearchResults(response.data);
+      } catch (error) {
+          console.error('Error fetching data:', error);
+      }
+  };
 
-    const handleChange = (e) => {
-        setSearchText(e.target.value);
-    };
+  const handleChange = (e) => {
+      setSearchText(e.target.value);
+  };
 
   return (
     <div className="MeetSearchBar">
+
+      <div className="meetSearchBar-div1">
         <input
-        type="text"
-        placeholder="Enter search text..."
-        value={searchText}
-        onChange={handleChange}
-      />
-      <button onClick={handleSearch}>Search</button>
+          type="text"
+          placeholder="Enter search text..."
+          value={searchText}
+          onChange={handleChange}
+        />
+        <button onClick={handleSearch}>Search</button>
+      </div>
+
       <div>
-        <h3>Search Results:</h3>
+        <h4 style={{marginTop:"5px", marginBottom:"5px"}}>Search Results:</h4>
         <ul>
           {searchResults.map((result, index) => (
             <li key={index}>
@@ -55,6 +59,8 @@ function MeetSearchBar({ chunks }) {
           ))}
         </ul>
       </div>
+
+
     </div>
   );
 }

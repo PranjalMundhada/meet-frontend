@@ -8,7 +8,9 @@ const Home = () => {
     const [id, setId] = useState();
     const [roomState, setRoomState] = useState(true);
     const [createName, setCreateName] = useState();
+    const [createEmail, setCreateEmail] = useState();
     const [joinName, setJoinName] = useState();
+    const [joinEmail, setJoinEmail] = useState();
     const [roomId, setroomId] = useState();
     const navigate = useNavigate();
 
@@ -53,7 +55,13 @@ const Home = () => {
                                 value={createName} 
                                 onChange={(e) => setCreateName(e.target.value)}
                             />
-                            <br />
+                            <label htmlFor="createEmail">Email</label>
+                            <input 
+                                type="email" 
+                                id="createEmail"
+                                value={createEmail} 
+                                onChange={(e) => setCreateEmail(e.target.value)}
+                            />
                             <div>
                                 <label htmlFor="createRoom">Room ID</label>
                                 <img src={copy} alt='copy' onClick={handleCopyRoomId} />
@@ -64,7 +72,6 @@ const Home = () => {
                                 id="createRoom" 
                                 value={id} 
                             />
-                            <br />
                             <button>Create Room</button>
                             <p>Want to join room? <span onClick={() => setRoomState(!roomState)}>Click here</span></p>
                         </form>
@@ -80,7 +87,13 @@ const Home = () => {
                                 value={joinName} 
                                 onChange={(e) => setJoinName(e.target.value)}
                             />
-                            <br />
+                            <label htmlFor="joinEmail">Email</label>
+                            <input 
+                                type="email" 
+                                id="joinEmail"
+                                value={joinEmail} 
+                                onChange={(e) => setJoinEmail(e.target.value)}
+                            />
                             <label htmlFor="joinRoom">Room ID</label>
                             <input 
                                 key="joinRoom"
@@ -89,7 +102,6 @@ const Home = () => {
                                 value={roomId} 
                                 onChange={(e) => setroomId(e.target.value)}
                             />
-                            <br />
                             <button>Join Room</button>
                             <p>Want to create room? <span onClick={() => setRoomState(!roomState)}>Click here</span></p>
                         </form>

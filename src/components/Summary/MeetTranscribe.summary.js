@@ -26,6 +26,8 @@ function MeetTranscribe({ setTranscribed, onChunksChange, onTextChange, roomId }
         }
       });
 
+      console.log('API response:', response.data);
+
       const { chunks, text } = response.data;
       await transcribeCollectionRef.update({
         [Date.now()]: {
@@ -36,6 +38,16 @@ function MeetTranscribe({ setTranscribed, onChunksChange, onTextChange, roomId }
 
     } catch (error) {
       console.error("Error fetching data:", error);
+
+      if (error.response) {
+        console.error('API response:', error.response.data);
+        console.error('API status:', error.response.status);
+        console.error('API headers:', error.response.headers);
+      } else if (error.request) {
+        console.error('No response received from API');
+      } else {
+        console.error('Error setting up API request:', error.message);
+      }
     }
   };
 
